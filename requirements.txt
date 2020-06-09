@@ -1,0 +1,4 @@
+requests
+databricks-connect
+databricks-cli
+pytest

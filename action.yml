@@ -1,0 +1,39 @@
+name: 'Databrick Notebook Run'
+description: 'Run a notebook in Databrick'
+author: "Herman-Wu"
+inputs:
+  databrick-server-uri: # id of input
+    description: 'URL of the databrick server'
+    required: true
+    default: "https://adb-XXXX.XX.azuredatabricks.net"
+  databrick-token: # id of input
+    description: 'Databrick Access Token'
+    required: true
+    default: "abcdefghijk"
+  databrick-cluster-id: # id of input
+    description: 'Databrick Cluster ID'
+    required: true
+    default: "abcdefghijk"
+  databrick-libraries: # id of input
+    description: 'Libraries for Databrick'
+    required: true
+    default: "XXX"
+  databrick-dbfs-path: # id of input
+    description: 'Libraries for Databrick'
+    required: true
+    default: "YYYY"
+outputs:
+  result: # id of output
+    description: 'Installation result of the librarires'
+branding:
+  icon: "align-justify"
+  color: "red"
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.databrick-server-uri }}
+    - ${{ inputs.databrick-token }}
+    - ${{ inputs.databrick-cluster-id }}
+    - ${{ inputs.databrick-libraries }}
+    - ${{ inputs.databrick-dbfs-path }}
