@@ -13,6 +13,19 @@ DBFSPATH=$5
 
 echo "Hello2 $DBURL $TOKEN $CLUSTERID $LIBS $DBFSPATH "
 
+echo "Run: python3 ${SCRIPTPATH}/installWhlLibrary.py --workspace=${DBURL}\
+                        --token=$TOKEN\
+                        --clusterid=${CLUSTERID}\
+                        --libs=$LIBS\
+                        --dbfspath=${DBFSPATH} "
+
+
+echo "Run: python3 ${SCRIPTPATH}/installWhlLibrary.py --workspace=${DBURL}\
+                        --token=$TOKEN\
+                        --clusterid=${CLUSTERID}\
+                        --libs=$LIBS\
+                        --dbfspath=${DBFSPATH} "
+
 python3 ${SCRIPTPATH}/installWhlLibrary.py --workspace=${DBURL}\
                         --token=$TOKEN\
                         --clusterid=${CLUSTERID}\
