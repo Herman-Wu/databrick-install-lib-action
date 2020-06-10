@@ -1,6 +1,6 @@
 #!/bin/sh -l
 
-echo "Hello $1 $2 $3 $4 $5 "
+echo "Start Install WHL Libiraries with parameters $1 $2 $3 $4 $5 "
 time=$(date)
 echo ::set-output name=time::$time
 
@@ -10,21 +10,7 @@ CLUSTERID=$3
 LIBS=$4
 DBFSPATH=$5
 
-
-echo "Hello2 $DBURL $TOKEN $CLUSTERID $LIBS $DBFSPATH "
-
-echo "Run: python3 ${SCRIPTPATH}/installWhlLibrary.py --workspace=${DBURL}\
-                        --token=$TOKEN\
-                        --clusterid=${CLUSTERID}\
-                        --libs=$LIBS\
-                        --dbfspath=${DBFSPATH} "
-
-
-echo "Run: python3 ${SCRIPTPATH}/installWhlLibrary.py --workspace=${DBURL}\
-                        --token=$TOKEN\
-                        --clusterid=${CLUSTERID}\
-                        --libs=$LIBS\
-                        --dbfspath=${DBFSPATH} "
+echo "Install WHL Libiraries with parameters $DBURL $TOKEN $CLUSTERID $LIBS $DBFSPATH "
 
 python3 ${SCRIPTPATH}/installWhlLibrary.py --workspace=${DBURL}\
                         --token=$TOKEN\

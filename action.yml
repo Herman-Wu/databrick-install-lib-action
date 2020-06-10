@@ -1,5 +1,5 @@
-name: 'Databrick Notebook Run'
-description: 'Run a notebook in Databrick'
+name: 'Install Libraries to Databrick Clusters'
+description: 'Install WHL into Databrick clusters'
 author: "Herman-Wu"
 inputs:
   databrick-server-uri: # id of input
@@ -19,14 +19,14 @@ inputs:
     required: true
     default: "XXX"
   databrick-dbfs-path: # id of input
-    description: 'Libraries for Databrick'
+    description: 'DBFS path to the libraries'
     required: true
     default: "YYYY"
 outputs:
   result: # id of output
     description: 'Installation result of the librarires'
 branding:
-  icon: "align-justify"
+  icon: "download-cloud"
   color: "red"
 runs:
   using: 'docker'
