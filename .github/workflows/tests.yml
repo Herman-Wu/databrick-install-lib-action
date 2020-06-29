@@ -1,56 +1,50 @@
-# This is a basic workflow to help you get started with Actions
 
 name: CI-Tests
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  BuildTestContainer:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Build Test Image
+        uses: docker/build-push-action@v1.1.0
+        with:
+          username: xinsnake
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          repository: xinsnake/databrick-install-lib-action-mocks
+          tags: ${{ github.sha }}
+          path: ./tests/mocks
+          always_pull: true
+  BuildActionContainer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Action Image
+        uses: docker/build-push-action@v1.1.0
+        with:
+          username: xinsnake
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          repository: xinsnake/databrick-install-lib-action
+          tags: ${{ github.sha }}
+          path: .
+          always_pull: true
+  RunTest:
+    runs-on: ubuntu-latest
+    container: xinsnake/databrick-install-lib-action:${{ github.sha }}
+    needs: [BuildTestContainer, BuildActionContainer]
+    services:
+      mocks:
+        image: xinsnake/databrick-install-lib-action-mocks:${{ github.sha }}
+        ports: 
+          - 5000:5000
+    steps:
     - uses: actions/checkout@v2
-
-    - name: Build Test Image
-      uses: docker/build-push-action@v1.1.0
-      with:
-        # Docker repository to tag the image with
-        repository: databrick-install-lib-action-mocks
-        # Comma-delimited list of tags. These will be added to the registry/repository to form the image's tags
-        tags: latest
-        # Path to the build context
-        path: ./tests/mocks
-        # Always attempt to pull a newer version of the image
-        always_pull: true
-        # Whether to push the image
-        push: false
-
-    - name: Build Action Image
-      uses: docker/build-push-action@v1.1.0
-      with:
-        # Docker repository to tag the image with
-        repository: databrick-install-lib-action
-        # Comma-delimited list of tags. These will be added to the registry/repository to form the image's tags
-        tags: latest
-        # Path to the build context
-        path: .
-        # Always attempt to pull a newer version of the image
-        always_pull: true
-        # Whether to push the image
-        push: false
-        
     - name: Run Tests
       run: |
-        docker run --rm -p 5000:5000 databrick-install-lib-action-mocks:latest
-        docker run --rm databrick-install-lib-action:latest /entrypoint.sh "http://localhost:5000" "token123" "clusterid123" "lib01,lib02,lib03" "dbfs://somedir"
+        /entrypoint.sh "http://mocks:5000" "token123" "clusterid123" "lib01 lib02 lib03" "dbfs://somedir"

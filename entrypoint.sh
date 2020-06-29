@@ -17,5 +17,3 @@ python3 ${SCRIPTPATH}/installWhlLibrary.py --workspace=${DBURL}\
                         --clusterid=${CLUSTERID}\
                         --libs=$LIBS\
                         --dbfspath=${DBFSPATH}
-
-echo "Install Libraries Done"

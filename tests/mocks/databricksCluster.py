@@ -11,6 +11,7 @@ class MockDBCluster:
     self.__cluster_id = cluster_id
     self.__current_state = init_state
     self.__installed_libraries = init_libraries
+    self.__installed_libraries_after_restart = init_libraries
 
   def __isInstalled(self, library):
     for l in self.__installed_libraries:
@@ -34,12 +35,12 @@ class MockDBCluster:
   def get_library_statuses(self):
     libs = []
     for l in self.__installed_libraries:
-      libs.append({'library': l, 'status': 'installed'})
+      libs.append({'library': l, 'status': 'INSTALLED'})
     return libs
 
   def uninstall_library(self, libraries):
     for library in libraries:
-      if self.__isInstalled(library):
+      if self.__isInstalledAfterRestart(library):
         self.__installed_libraries_after_restart.remove(library)
 
   def get_status(self):

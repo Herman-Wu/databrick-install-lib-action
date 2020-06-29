@@ -20,7 +20,7 @@ def get_cluster():
     return None
 
   if not (cluster_id in clusters):
-    clusters[cluster_id] = MockDBCluster(cluster_id, 'PENDING', [])
+    clusters[cluster_id] = MockDBCluster(cluster_id, 'RUNNING', [{'whl': 'dbfs://somedir/lib01'}])
 
   return clusters.get(cluster_id)
 
@@ -69,4 +69,4 @@ def clusters_get():
   cluster = get_cluster()
   if cluster is None:
     return ('', 400)
-  return {'status': cluster.get_status()}
+  return {'state': cluster.get_status()}
