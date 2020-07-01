@@ -1,0 +1,50 @@
+
+name: CI-Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  BuildTestContainer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Test Image
+        uses: docker/build-push-action@v1.1.0
+        with:
+          username: xinsnake
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          repository: xinsnake/databrick-install-lib-action-mocks
+          tags: ${{ github.sha }}
+          path: ./tests/mocks
+          always_pull: true
+  BuildActionContainer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Action Image
+        uses: docker/build-push-action@v1.1.0
+        with:
+          username: xinsnake
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          repository: xinsnake/databrick-install-lib-action
+          tags: ${{ github.sha }}
+          path: .
+          always_pull: true
+  RunTest:
+    runs-on: ubuntu-latest
+    container: xinsnake/databrick-install-lib-action:${{ github.sha }}
+    needs: [BuildTestContainer, BuildActionContainer]
+    services:
+      mocks:
+        image: xinsnake/databrick-install-lib-action-mocks:${{ github.sha }}
+        ports: 
+          - 5000:5000
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Tests
+      run: |
+        /entrypoint.sh "http://mocks:5000" "token123" "clusterid123" "lib01,lib02,lib03" "dbfs://somedir/"
