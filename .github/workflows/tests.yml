@@ -47,4 +47,4 @@ jobs:
     - uses: actions/checkout@v2
     - name: Run Tests
       run: |
-        /entrypoint.sh "http://mocks:5000" "token123" "clusterid123" "lib01 lib02 lib03" "dbfs://somedir"
+        /entrypoint.sh "http://mocks:5000" "token123" "clusterid123" "lib01,lib02,lib03" "dbfs://somedir/"
